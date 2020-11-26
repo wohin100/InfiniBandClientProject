@@ -19,7 +19,7 @@ int main() {
     Detector::BuildConfig::printBanner();
     bool network = true;
     bool compatibility = true;
-    Detector::IbFabric fabric(network, compatibility);
+    Detector::IbFabric fabric(local, compatibility);
 
     for(Detector::IbNode *node : fabric.GetNodes()) {
         for(Detector::IbPort *port : node->GetPorts()) {
