@@ -38,14 +38,14 @@ int main() {
         cerr << "Socket can't be created" << endl;
         return -1;
     }
-
+    cerr << "Test2" << endl;
     // set address informations to client info struct
     sockaddr_in serverSocketAddressInformation;
     serverSocketAddressInformation.sin_family = AF_INET;
     serverSocketAddressInformation.sin_port = htons(port);
     // make it binary
     inet_pton(AF_INET, serverAddress, &serverSocketAddressInformation.sin_addr);
-
+    cerr << "Test3" << endl;
     //	Connect to server
     int connectionSuccess = connect(clientSocket, (sockaddr*)&serverSocketAddressInformation, sizeof(serverSocketAddressInformation));
 
