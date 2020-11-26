@@ -56,7 +56,7 @@ int main() {
         cerr << errno << endl;
         return -1;
     }
-
+    cerr << "Test4" << endl;
     // send data
     char buffer[4096];
     string userInput = "{a:x}";
@@ -66,7 +66,7 @@ int main() {
     if(userInput.size() + 1 - sendResult == 0){
         std::cout << "Data transmission completed" << std::endl;
     }
-
+    cerr << "Test5" << endl;
 
     close(clientSocket);
 
