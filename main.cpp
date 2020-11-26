@@ -30,7 +30,7 @@ static void SignalHandler(int signal) {
 }
 
 int main() {
-
+    cerr << "Test" << endl;
     // socket creation
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1)
