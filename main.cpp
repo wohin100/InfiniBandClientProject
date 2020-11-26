@@ -27,6 +27,7 @@ int main() {
     std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
     uint8_t ports = nodes.front()->GetNumPorts();
 
+    std::cout << nodeNr << std::endl;
     std::cout << ports << std::endl;
     return 0;
 }
