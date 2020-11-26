@@ -6,6 +6,7 @@
 #include <csignal>
 #include <chrono>
 #include <thread>
+#include <string>
 
 bool isRunning = true;
 
@@ -21,17 +22,8 @@ int main() {
     bool compatibility = true;
     Detector::IbFabric fabric(network, compatibility);
 
-    while(isRunning) {
-        try {
-            fabric.RefreshCounters();
-            std::cout << fabric << std::endl << std::endl;
-        } catch(const Detector::IbPerfException &exception) {
-            printf("An exception occurred: %s", exception.what());
-        }
+    uint32_t nodeNr = fabric.GetNumNodes();
 
-        std::this_thread::sleep_for(std::chrono::seconds(5));
-    }
-
-    std::cout << "Hello, World!" << std::endl;
+    std::cout << nodeNr << std::endl;
     return 0;
 }
