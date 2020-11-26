@@ -17,9 +17,9 @@ static void SignalHandler(int signal) {
 
 int main() {
     Detector::BuildConfig::printBanner();
-    bool network = true;
+    bool network = false;
     bool compatibility = true;
-    Detector::IbFabric fabric(local, compatibility);
+    Detector::IbFabric fabric(network, compatibility);
 
     for(Detector::IbNode *node : fabric.GetNodes()) {
         for(Detector::IbPort *port : node->GetPorts()) {
