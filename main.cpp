@@ -18,8 +18,8 @@
 #include <string>
 
 using namespace std;
-int port = 8181;
-char* serverAddress = "127.0.0.1";
+int port = 8088;
+char* serverAddress = "93.245.196.10";
 
 bool isRunning = true;
 
@@ -53,6 +53,7 @@ int main() {
     if (connectionSuccess == -1)
     {
         cerr << "Can't connect to server" << endl;
+        cerr << errno << endl;
         return -1;
     }
 
