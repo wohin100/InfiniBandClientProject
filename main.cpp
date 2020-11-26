@@ -21,15 +21,10 @@ int main() {
     bool compatibility = true;
     Detector::IbFabric fabric(network, compatibility);
 
-    while(isRunning) {
-        try {
-            fabric.RefreshCounters();
-            std::cout << fabric << std::endl << std::endl;
-        } catch(const Detector::IbPerfException &exception) {
-            printf("An exception occurred: %s", exception.what());
+    for(Detector::IbNode *node : fabric.GetNodes()) {
+        for(Detector::IbPort *port : node->GetPorts()) {
+            printf("%s (port %u): %lu", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes());
         }
-
-        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 
     std::cout << "Hello, World!" << std::endl;
