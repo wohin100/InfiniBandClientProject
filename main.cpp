@@ -7,6 +7,7 @@
 #include <chrono>
 #include <thread>
 #include <string>
+#include <vector>
 
 bool isRunning = true;
 
@@ -23,7 +24,9 @@ int main() {
     Detector::IbFabric fabric(network, compatibility);
 
     uint32_t nodeNr = fabric.GetNumNodes();
+    std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
+    uint8_t ports = nodes.front()->GetNumPorts();
 
-    std::cout << nodeNr << std::endl;
+    std::cout << ports << std::endl;
     return 0;
 }
