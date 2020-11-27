@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
         // collect infiniband infos
         try {
 
-            std::cout << "Collect infiniband data" << std::endl;
+            //std::cout << "Collect infiniband data" << std::endl;
 
             bool network = false;
             bool compatibility = true;
@@ -68,19 +68,25 @@ int main(int argc, char *argv[]) {
 #endif
 
             json jsonToTransfer;
+            int xmitData = 0;
+            int recData = 0;
             for (Detector::IbNode *node : fabric.GetNodes()) {
                 for (Detector::IbPort *port : node->GetPorts()) {
-                    printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(),
-                           port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
-                    std::cout << std::endl;
+                    //printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(),
+                    //       port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
+                    //std::cout << std::endl;
                     jsonToTransfer["node"] = node->GetDescription();
                     jsonToTransfer["port"] = port->GetNum();
                     jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
                     jsonToTransfer["received"] = port->GetRcvDataBytes();
+                    xmitData = port->GetXmitDataBytes();
+                    recData = port->GetRcvDataBytes();
                 }
             }
-            std::string debugOutput = jsonToTransfer.dump();
-            std::cout << debugOutput << std::endl;
+            if(xmitData > 0 || recData > 0){
+                std::string debugOutput = jsonToTransfer.dump();
+                std::cout << debugOutput << std::endl;
+            }
         } catch (const std::exception &e) {
 
         }
