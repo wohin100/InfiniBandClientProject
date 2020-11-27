@@ -68,9 +68,11 @@ int main(int argc, char *argv[]) {
         std::cout << ports << std::endl;
 #endif
         while (true) {
+            /*
             json jsonToTransfer;
             int xmitData = 0;
             int recData = 0;
+            fabric.RefreshCounters();
             for (Detector::IbNode *node : fabric.GetNodes()) {
                 for (Detector::IbPort *port : node->GetPorts()) {
                     //printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(),
@@ -88,6 +90,10 @@ int main(int argc, char *argv[]) {
                 std::string debugOutput = jsonToTransfer.dump();
                 std::cout << debugOutput << std::endl;
             }
+             */
+
+            fabric.RefreshCounters();
+            std::cout << fabric << std::endl << std::endl;
         }
     } catch (const std::exception &e) {
 
