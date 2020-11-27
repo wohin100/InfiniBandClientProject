@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
             fabric.RefreshCounters();
             std::vector<Detector::IbNode *> nodeVector = fabric.GetNodes();
             for (Detector::IbNode *node : nodeVector){
-                int rec = node->GetRcvDataBytes();
+                //int rec = node->GetRcvDataBytes();
                 //std::cout << rec << std::endl;
                 std::vector<Detector::IbPort *> portVector = node->GetPorts();
                 for (Detector::IbPort *port : portVector){
