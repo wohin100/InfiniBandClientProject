@@ -51,7 +51,7 @@ int main() {
 
     for(Detector::IbNode *node : fabric.GetNodes()) {
         for(Detector::IbPort *port : node->GetPorts()) {
-            dataToSend = printf("{node:%s, port:%u, transmitted:%lu", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes());
+            dataToSend = printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
         }
     }
     std::cout << dataToSend << std::endl;
