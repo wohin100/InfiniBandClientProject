@@ -20,7 +20,7 @@
 using nlohmann::json;
 
 using namespace std;
-int port = 8088;
+int port = 80;
 char* serverAddress = "93.245.196.10";
 
 bool isRunning = true;
@@ -55,6 +55,7 @@ int main() {
     for(Detector::IbNode *node : fabric.GetNodes()) {
         for(Detector::IbPort *port : node->GetPorts()) {
             printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
+            std::cout << std::endl;
             jsonToTransfer["node"] = node->GetDescription();
             jsonToTransfer["port"] = port->GetNum();
             jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
