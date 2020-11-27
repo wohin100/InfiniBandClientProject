@@ -16,6 +16,8 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <string>
+#include <nlohmann/json.hpp>
+using nlohmann::json;
 
 using namespace std;
 int port = 8088;
@@ -49,12 +51,18 @@ int main() {
     std::cout << ports << std::endl;
     #endif
 
+    json jsonToTransfer;
     for(Detector::IbNode *node : fabric.GetNodes()) {
         for(Detector::IbPort *port : node->GetPorts()) {
-            dataToSend = printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
+            printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
+            jsonToTransfer["node"] = node->GetDescription();
+            jsonToTransfer["port"] = port->GetNum();
+            jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
+            jsonToTransfer["received"] = port->GetRcvDataBytes();
         }
     }
-    std::cout << printf("DataToSend:%s", dataToSend.c_str()) << std::endl;
+    std::string debugOutput = jsonToTransfer.dump();
+    std::cout << debugOutput << std::endl;
 
     // socket creation
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
