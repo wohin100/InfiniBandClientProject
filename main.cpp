@@ -33,8 +33,8 @@ static void SignalHandler(int signal) {
 
 int main() {
     // collect infiniband infos
-    std::cout << "Collect infiniband" << std::endl;
-    string dataToSend = "{a:x}";
+    std::cout << "Collect infiniband data" << std::endl;
+    string dataToSend = "{}";
 
     bool network = false;
     bool compatibility = true;
@@ -54,7 +54,7 @@ int main() {
             dataToSend = printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
         }
     }
-    std::cout << dataToSend << std::endl;
+    std::cout << printf("DataToSend:%s", dataToSend.c_str()) << std::endl;
 
     // socket creation
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
