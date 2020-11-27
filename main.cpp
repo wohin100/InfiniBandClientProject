@@ -92,18 +92,22 @@ int main(int argc, char *argv[]) {
             }
              */
 
+            json jsonToTransfer;
             fabric.RefreshCounters();
             std::vector<Detector::IbNode *> nodeVector = fabric.GetNodes();
             for (Detector::IbNode *node : nodeVector){
-                //int rec = node->GetRcvDataBytes();
-                //std::cout << rec << std::endl;
                 std::vector<Detector::IbPort *> portVector = node->GetPorts();
                 for (Detector::IbPort *port : portVector){
                     int rec = port->GetRcvDataBytes();
                     std::cout << rec << std::endl;
+                    jsonToTransfer["node"] = node->GetDescription();
+                    jsonToTransfer["port"] = port->GetNum();
+                    jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
+                    jsonToTransfer["received"] = port->GetRcvDataBytes();
                 }
             }
-            //std::cout << nodeVector << std::endl << std::endl;
+            std::string debugOutput = jsonToTransfer.dump();
+            std::cout << debugOutput << std::endl;
         }
     } catch (const std::exception &e) {
 
