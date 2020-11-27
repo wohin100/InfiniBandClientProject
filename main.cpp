@@ -23,6 +23,8 @@ char* serverAddress = "93.245.196.10";
 
 bool isRunning = true;
 
+#define debug = true;
+
 static void SignalHandler(int signal) {
     if(signal == SIGINT) {
         isRunning = false;
@@ -30,7 +32,30 @@ static void SignalHandler(int signal) {
 }
 
 int main() {
-    cerr << "Test" << endl;
+    // collect infiniband infos
+    std::cout << "Collect infiniband" << std::endl;
+    string dataToSend = "{a:x}";
+
+    bool network = false;
+    bool compatibility = true;
+    Detector::IbFabric fabric(network, compatibility);
+
+    uint32_t nodeNr = fabric.GetNumNodes();
+    std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
+    uint8_t ports = nodes.front()->GetNumPorts();
+
+    #ifdef debug
+    std::cout << nodeNr << std::endl;
+    std::cout << ports << std::endl;
+    #endif
+
+    for(Detector::IbNode *node : fabric.GetNodes()) {
+        for(Detector::IbPort *port : node->GetPorts()) {
+            dataToSend = printf("{node:%s, port:%u, transmitted:%lu", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes());
+        }
+    }
+    std::cout << dataToSend << std::endl;
+
     // socket creation
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1)
@@ -38,14 +63,14 @@ int main() {
         cerr << "Socket can't be created" << endl;
         return -1;
     }
-    cerr << "Test2" << endl;
+
     // set address informations to client info struct
     sockaddr_in serverSocketAddressInformation;
     serverSocketAddressInformation.sin_family = AF_INET;
     serverSocketAddressInformation.sin_port = htons(port);
     // make it binary
     inet_pton(AF_INET, serverAddress, &serverSocketAddressInformation.sin_addr);
-    cerr << "Test3" << endl;
+
     //	Connect to server
     int connectionSuccess = connect(clientSocket, (sockaddr*)&serverSocketAddressInformation, sizeof(serverSocketAddressInformation));
 
@@ -56,32 +81,16 @@ int main() {
         cerr << errno << endl;
         return -1;
     }
-    cerr << "Test4" << endl;
+
     // send data
     char buffer[4096];
-    string userInput = "{a:x}";
 
-    int sendResult = send(clientSocket, userInput.c_str(), userInput.size() + 1, 0);
+    int sendResult = send(clientSocket, dataToSend.c_str(), dataToSend.size() + 1, 0);
 
-    if(userInput.size() + 1 - sendResult == 0){
+    if(dataToSend.size() + 1 - sendResult == 0){
         std::cout << "Data transmission completed" << std::endl;
     }
-    cerr << "Test5" << endl;
 
     close(clientSocket);
-
-
-    Detector::BuildConfig::printBanner();
-    bool network = false;
-    bool compatibility = true;
-    Detector::IbFabric fabric(network, compatibility);
-
-    uint32_t nodeNr = fabric.GetNumNodes();
-    std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
-    uint8_t ports = nodes.front()->GetNumPorts();
-
-    std::cout << nodeNr << std::endl;
-    std::cout << ports << std::endl;
-
     return 0;
 }
