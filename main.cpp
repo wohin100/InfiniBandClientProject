@@ -17,28 +17,29 @@
 #include <string.h>
 #include <string>
 #include <nlohmann/json.hpp>
+
 using nlohmann::json;
 
 using namespace std;
 int port = 80;
-char* serverAddress;
+char *serverAddress;
 
 bool isRunning = true;
 
 //#define debug = true;
 
 static void SignalHandler(int signal) {
-    if(signal == SIGINT) {
+    if (signal == SIGINT) {
         isRunning = false;
     }
 }
 
 int main(int argc, char *argv[]) {
     // check params
-    if(argc < 3) {
+    if (argc < 3) {
         printf("Usage: ./InfiniBandClient <serverAddress> <port>\n");
         exit(EXIT_FAILURE);
-    }else{
+    } else {
         serverAddress = argv[1];
         port = stoi(argv[2]);
     }
@@ -46,27 +47,27 @@ int main(int argc, char *argv[]) {
 
     string dataToSend = "{}";
 
-    while(true) {
 
 
-        // collect infiniband infos
-        try {
 
-            //std::cout << "Collect infiniband data" << std::endl;
+    // collect infiniband infos
+    try {
 
-            bool network = false;
-            bool compatibility = true;
-            Detector::IbFabric fabric(network, compatibility);
+        //std::cout << "Collect infiniband data" << std::endl;
 
-            uint32_t nodeNr = fabric.GetNumNodes();
-            std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
-            uint8_t ports = nodes.front()->GetNumPorts();
+        bool network = false;
+        bool compatibility = true;
+        Detector::IbFabric fabric(network, compatibility);
+
+        uint32_t nodeNr = fabric.GetNumNodes();
+        std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
+        uint8_t ports = nodes.front()->GetNumPorts();
 
 #ifdef debug
-            std::cout << nodeNr << std::endl;
-            std::cout << ports << std::endl;
+        std::cout << nodeNr << std::endl;
+        std::cout << ports << std::endl;
 #endif
-
+        while (true) {
             json jsonToTransfer;
             int xmitData = 0;
             int recData = 0;
@@ -75,28 +76,28 @@ int main(int argc, char *argv[]) {
                     //printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(),
                     //       port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
                     //std::cout << std::endl;
-                    jsonToTransfer["node"] = node->GetDescription();
-                    jsonToTransfer["port"] = port->GetNum();
-                    jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
-                    jsonToTransfer["received"] = port->GetRcvDataBytes();
-                    xmitData = port->GetXmitDataBytes();
-                    recData = port->GetRcvDataBytes();
+                    //jsonToTransfer["node"] = node->GetDescription();
+                    //jsonToTransfer["port"] = port->GetNum();
+                    //jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
+                    //jsonToTransfer["received"] = port->GetRcvDataBytes();
+                    //xmitData = port->GetXmitDataBytes();
+                    //recData = port->GetRcvDataBytes();
                 }
             }
-            if(xmitData > 0 || recData > 0){
+            if (xmitData > 0 || recData > 0) {
                 std::string debugOutput = jsonToTransfer.dump();
                 std::cout << debugOutput << std::endl;
             }
-        } catch (const std::exception &e) {
-
         }
+    } catch (const std::exception &e) {
+
+
     }
     // socket creation
     std::cout << "Send infiniband data to server" << std::endl;
 
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (clientSocket == -1)
-    {
+    if (clientSocket == -1) {
         cerr << "Socket can't be created" << endl;
         return -1;
     }
@@ -109,11 +110,11 @@ int main(int argc, char *argv[]) {
     inet_pton(AF_INET, serverAddress, &serverSocketAddressInformation.sin_addr);
 
     //	Connect to server
-    int connectionSuccess = connect(clientSocket, (sockaddr*)&serverSocketAddressInformation, sizeof(serverSocketAddressInformation));
+    int connectionSuccess = connect(clientSocket, (sockaddr *) &serverSocketAddressInformation,
+                                    sizeof(serverSocketAddressInformation));
 
     // error
-    if (connectionSuccess == -1)
-    {
+    if (connectionSuccess == -1) {
         cerr << "Can't connect to server" << endl;
         cerr << errno << endl;
         return -1;
@@ -124,7 +125,7 @@ int main(int argc, char *argv[]) {
 
     int sendResult = send(clientSocket, dataToSend.c_str(), dataToSend.size() + 1, 0);
 
-    if(dataToSend.size() + 1 - sendResult == 0){
+    if (dataToSend.size() + 1 - sendResult == 0) {
         std::cout << "Data transmission completed" << std::endl;
     }
 
