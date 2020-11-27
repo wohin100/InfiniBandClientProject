@@ -25,7 +25,7 @@ char* serverAddress;
 
 bool isRunning = true;
 
-#define debug = true;
+//#define debug = true;
 
 static void SignalHandler(int signal) {
     if(signal == SIGINT) {
