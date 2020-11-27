@@ -4,15 +4,10 @@
 #include <detector/IbNode.h>
 #include <detector/exception/IbFileException.h>
 #include <csignal>
-#include <chrono>
-#include <thread>
 #include <string>
 #include <vector>
-
-#include <sys/types.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
 #include <string>
@@ -46,10 +41,7 @@ int main(int argc, char *argv[]) {
 
 
     string dataToSend = "{}";
-
-
-
-
+/*
     // collect infiniband infos
     try {
 
@@ -59,39 +51,7 @@ int main(int argc, char *argv[]) {
         bool compatibility = true;
         Detector::IbFabric fabric(network, compatibility);
 
-        uint32_t nodeNr = fabric.GetNumNodes();
-        std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
-        uint8_t ports = nodes.front()->GetNumPorts();
-
-#ifdef debug
-        std::cout << nodeNr << std::endl;
-        std::cout << ports << std::endl;
-#endif
         while (true) {
-            /*
-            json jsonToTransfer;
-            int xmitData = 0;
-            int recData = 0;
-            fabric.RefreshCounters();
-            for (Detector::IbNode *node : fabric.GetNodes()) {
-                for (Detector::IbPort *port : node->GetPorts()) {
-                    //printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(),
-                    //       port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
-                    //std::cout << std::endl;
-                    //jsonToTransfer["node"] = node->GetDescription();
-                    //jsonToTransfer["port"] = port->GetNum();
-                    //jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
-                    //jsonToTransfer["received"] = port->GetRcvDataBytes();
-                    //xmitData = port->GetXmitDataBytes();
-                    //recData = port->GetRcvDataBytes();
-                }
-            }
-            if (xmitData > 0 || recData > 0) {
-                std::string debugOutput = jsonToTransfer.dump();
-                std::cout << debugOutput << std::endl;
-            }
-             */
-
             json jsonToTransfer;
             fabric.RefreshCounters();
             std::vector<Detector::IbNode *> nodeVector = fabric.GetNodes();
@@ -111,8 +71,8 @@ int main(int argc, char *argv[]) {
         }
     } catch (const std::exception &e) {
 
-
     }
+    */
     // socket creation
     std::cout << "Send infiniband data to server" << std::endl;
 
