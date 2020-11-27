@@ -21,7 +21,7 @@ using nlohmann::json;
 
 using namespace std;
 int port = 80;
-char* serverAddress = "93.245.196.10";
+char* serverAddress;
 
 bool isRunning = true;
 
@@ -33,7 +33,18 @@ static void SignalHandler(int signal) {
     }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    // check params
+    if(argc < 3) {
+        printf("Usage: ./InfiniBandClient <serverAddress> <port>\n");
+        exit(EXIT_FAILURE);
+    }else{
+        serverAddress = argv[1];
+        port = stoi(argv[2]);
+    }
+
+
+
     // collect infiniband infos
     std::cout << "Collect infiniband data" << std::endl;
     string dataToSend = "{}";
@@ -66,6 +77,8 @@ int main() {
     std::cout << debugOutput << std::endl;
 
     // socket creation
+    std::cout << "Send infiniband data to server" << std::endl;
+
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1)
     {
