@@ -94,8 +94,9 @@ int main(int argc, char *argv[]) {
 
             fabric.RefreshCounters();
             std::vector<Detector::IbNode *> nodeVector = fabric.GetNodes();
-            int n = nodeVector.size();
-            cout << "Size of the vector is :" << n;
+            for (int i = 0; i < nodeVector.size(); i++){
+                cout << nodeVector.operator[](i) << " " << endl;
+            }
             //std::cout << nodeVector << std::endl << std::endl;
         }
     } catch (const std::exception &e) {
