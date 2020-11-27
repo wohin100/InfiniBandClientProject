@@ -44,38 +44,47 @@ int main(int argc, char *argv[]) {
     }
 
 
-
-    // collect infiniband infos
-    std::cout << "Collect infiniband data" << std::endl;
     string dataToSend = "{}";
 
-    bool network = false;
-    bool compatibility = true;
-    Detector::IbFabric fabric(network, compatibility);
+    while(true) {
 
-    uint32_t nodeNr = fabric.GetNumNodes();
-    std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
-    uint8_t ports = nodes.front()->GetNumPorts();
 
-    #ifdef debug
-    std::cout << nodeNr << std::endl;
-    std::cout << ports << std::endl;
-    #endif
+        // collect infiniband infos
+        try {
 
-    json jsonToTransfer;
-    for(Detector::IbNode *node : fabric.GetNodes()) {
-        for(Detector::IbPort *port : node->GetPorts()) {
-            printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(), port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
-            std::cout << std::endl;
-            jsonToTransfer["node"] = node->GetDescription();
-            jsonToTransfer["port"] = port->GetNum();
-            jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
-            jsonToTransfer["received"] = port->GetRcvDataBytes();
+            std::cout << "Collect infiniband data" << std::endl;
+
+            bool network = false;
+            bool compatibility = true;
+            Detector::IbFabric fabric(network, compatibility);
+
+            uint32_t nodeNr = fabric.GetNumNodes();
+            std::vector<Detector::IbNode *> nodes = fabric.GetNodes();
+            uint8_t ports = nodes.front()->GetNumPorts();
+
+#ifdef debug
+            std::cout << nodeNr << std::endl;
+            std::cout << ports << std::endl;
+#endif
+
+            json jsonToTransfer;
+            for (Detector::IbNode *node : fabric.GetNodes()) {
+                for (Detector::IbPort *port : node->GetPorts()) {
+                    printf("{node:%s, port:%u, transmitted:%lu, received:%lu}", node->GetDescription().c_str(),
+                           port->GetNum(), port->GetXmitDataBytes(), port->GetRcvDataBytes());
+                    std::cout << std::endl;
+                    jsonToTransfer["node"] = node->GetDescription();
+                    jsonToTransfer["port"] = port->GetNum();
+                    jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
+                    jsonToTransfer["received"] = port->GetRcvDataBytes();
+                }
+            }
+            std::string debugOutput = jsonToTransfer.dump();
+            std::cout << debugOutput << std::endl;
+        } catch (const std::exception &e) {
+
         }
     }
-    std::string debugOutput = jsonToTransfer.dump();
-    std::cout << debugOutput << std::endl;
-
     // socket creation
     std::cout << "Send infiniband data to server" << std::endl;
 
