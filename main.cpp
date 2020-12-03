@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 
 
     string dataToSend = "{}";
-/*
+
     // collect infiniband infos
     try {
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     } catch (const std::exception &e) {
 
     }
-    */
+    /*
     // socket creation
     std::cout << "Send infiniband data to server" << std::endl;
 
@@ -111,4 +111,5 @@ int main(int argc, char *argv[]) {
 
     close(clientSocket);
     return 0;
+     */
 }
