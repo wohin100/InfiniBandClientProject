@@ -58,13 +58,11 @@ int main(int argc, char *argv[]) {
             for (Detector::IbNode *node : nodeVector){
                 std::vector<Detector::IbPort *> portVector = node->GetPorts();
                 for (Detector::IbPort *port : portVector){
-                    int rec = port->GetLinkWidth();
-                    std::cout << rec << std::endl;
                     jsonToTransfer["node"] = node->GetDescription();
                     jsonToTransfer["port"] = port->GetNum();
                     jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
                     jsonToTransfer["received"] = port->GetRcvDataBytes();
-                    jsonToTransfer["linkWidth"] = port->GetLinkWidth();
+                    jsonToTransfer["MulticastRcvPkts"] = port->GetMulticastRcvPkts();
                 }
             }
             std::string debugOutput = jsonToTransfer.dump();
