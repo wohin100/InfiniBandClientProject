@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <iostream>
 #include "Client.h"
+#include "InfinibandReader.h"
 
 using nlohmann::json;
 
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]) {
     std::cout << j3["happy"] << "\n";
 
     // collect infiniband infos
-    //InfinibandReader::collectNodeInfos();
+    InfinibandReader::collectNodeInfos();
     auto *client = new Client(serverAddress, serverPort);
 
     for (int i = 0; i < 10; ++i) {
