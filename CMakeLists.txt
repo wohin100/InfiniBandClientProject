@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
 
 project(InfiniBandClientProject LANGUAGES CXX)
 
-add_executable(InfiniBandClient main.cpp)
+add_executable(InfiniBandClient main.cpp InfinibandReader.cpp InfinibandReader.h Client.cpp Client.h)
 
 include(ExternalProject)
 
