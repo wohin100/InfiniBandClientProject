@@ -40,10 +40,11 @@ int main(int argc, char *argv[]) {
     string dataToSend =  "{\"MulticastRcvPkts\":8,\"node\":\"mlx4_0\",\"port\":1,\"received\":"+std::to_string(ground)+",\"transmitted\":33984}";
 
     while (true) {
-    // collect infiniband infos
-    json infos = InfinibandReader::collectNodeInfos();
-    string debugOutput = infos.dump();
-    auto *client = new Client(serverAddress, serverPort);
+        // collect infiniband infos
+        json infos = InfinibandReader::collectNodeInfos();
+        string debugOutput = infos.dump();
+        cout << debugOutput << endl;
+        auto *client = new Client(serverAddress, serverPort);
 
         int randomNumber = rand() % 10;
         dataToSend =  "{\"MulticastRcvPkts\":8,\"node\":\""+std::to_string(clientNr)+"\",\"port\":1,\"received\":"+std::to_string(randomNumber)+",\"transmitted\":33984}";

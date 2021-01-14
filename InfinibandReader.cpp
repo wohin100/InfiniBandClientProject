@@ -14,7 +14,7 @@ using namespace std;
 json InfinibandReader::collectNodeInfos() {
     json jsonToTransfer;
     try {
-        //std::cout << "Collect infiniband data" << std::endl;
+        std::cout << "Collect infiniband data" << std::endl;
 
         bool network = false;
         bool compatibility = true;
@@ -36,6 +36,11 @@ json InfinibandReader::collectNodeInfos() {
         cout << debugOutput << std::endl;
 
     } catch (const std::exception &e) {
+        jsonToTransfer["node"] = "failed";
+        jsonToTransfer["port"] = 99;
+        jsonToTransfer["transmitted"] = 1;
+        jsonToTransfer["received"] = 1;
+        jsonToTransfer["MulticastRcvPkts"] = 1;
     }
     return jsonToTransfer;
 }
