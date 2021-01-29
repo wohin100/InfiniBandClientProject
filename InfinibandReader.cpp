@@ -55,6 +55,7 @@ json InfinibandReader::collectNodeInfos() {
                 jsonToTransfer[&"transmitted"[portNr]] = port->GetXmitDataBytes();
                 jsonToTransfer[&"received"[portNr]] = port->GetRcvDataBytes();
                 jsonToTransfer[&"MulticastRcvPkts"[portNr]] = port->GetMulticastRcvPkts();
+                portNr++;
             }
         }
         string debugOutput = jsonToTransfer.dump();
