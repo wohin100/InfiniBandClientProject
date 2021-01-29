@@ -49,12 +49,12 @@ json InfinibandReader::collectNodeInfos() {
             jsonToTransfer["nodeUnicastRcvPkts"] = node->GetUnicastRcvPkts();
             jsonToTransfer["nodeUnicastXmitPkts"] = node->GetUnicastXmitPkts();
             vector<Detector::IbPort *> portVector = node->GetPorts();
+            int portNr = 0;
             for (Detector::IbPort *port : portVector) {
-                jsonToTransfer["nodeGuid"] = node->GetGuid();
-                jsonToTransfer["port"] = port->GetNum();
-                jsonToTransfer["transmitted"] = port->GetXmitDataBytes();
-                jsonToTransfer["received"] = port->GetRcvDataBytes();
-                jsonToTransfer["MulticastRcvPkts"] = port->GetMulticastRcvPkts();
+                jsonToTransfer[&"port"[portNr]] = port->GetNum();
+                jsonToTransfer[&"transmitted"[portNr]] = port->GetXmitDataBytes();
+                jsonToTransfer[&"received"[portNr]] = port->GetRcvDataBytes();
+                jsonToTransfer[&"MulticastRcvPkts"[portNr]] = port->GetMulticastRcvPkts();
             }
         }
         string debugOutput = jsonToTransfer.dump();
