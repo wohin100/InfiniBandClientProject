@@ -1,19 +1,13 @@
-//
-// Created by master on 08.01.21.
-//
-
-#ifndef INFINIBANDCLIENTPROJECT_CLIENT_H
-#define INFINIBANDCLIENTPROJECT_CLIENT_H
-
+#include <string>
+using namespace std;
 
 class Client {
 public:
-    Client(char *serverAddress);
+    Client(string);
 
-    Client(char *serverAddress, int port);
+    Client(basic_string<char> serverAddress, int port);
 
     void sendDataToServer(std::string dataToSend);
+
+    void parseServerAddress(const string &serverAddress) const;
 };
-
-
-#endif //INFINIBANDCLIENTPROJECT_CLIENT_H

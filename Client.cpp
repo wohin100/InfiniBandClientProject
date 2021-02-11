@@ -1,18 +1,11 @@
-//
-// Created by master on 08.01.21.
-//
-
 #include <iostream>
 #include <string>
-#include <vector>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <string.h>
-#include <string>
-#include <nlohmann/json.hpp>
 #include "InfinibandReader.h"
 #include "Client.h"
+#include <cstring>
 
 using namespace std;
 
@@ -20,9 +13,21 @@ int clientSocket;
 char* address;
 int port;
 
-Client::Client(char* serverAddress, int serverPort) {
-    address = serverAddress;
+Client::Client(string serverAddress, int serverPort) {
+    parseServerAddress(serverAddress);
+
     port = serverPort;
+}
+
+void Client::parseServerAddress(const string &serverAddress) const {
+    int length = serverAddress.length();
+
+    char char_array[length + 1];
+    strcpy(address, serverAddress.c_str());
+
+    for (int charNr = 0; charNr < length; charNr++){
+        cout << char_array[charNr];
+    }
 }
 
 void Client::sendDataToServer(string dataToSend)
@@ -33,7 +38,7 @@ void Client::sendDataToServer(string dataToSend)
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
         cerr << "Socket can't be created" << endl;
-        throw "Socket can't be created";
+        exit(EXIT_FAILURE);
     }
 
     // set address informations to client info struct
@@ -51,7 +56,7 @@ void Client::sendDataToServer(string dataToSend)
     if (connectionSuccess == -1) {
         cerr << "Can't connect to server" << endl;
         cerr << errno << endl;
-        throw "Can't connect to server";
+        exit(EXIT_FAILURE);
     }
 
     // send data

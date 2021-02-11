@@ -30,8 +30,6 @@ json InfinibandReader::collectNodeInfos() {
             jsonToTransfer["nodeLinkDownedCounter"] = node->GetLinkDownedCounter();
             jsonToTransfer["nodeLocalLinkIntegrityErrors"] = node->GetLocalLinkIntegrityErrors();
             jsonToTransfer["nodeLinkRecoveryCounter"] = node->GetLinkRecoveryCounter();
-            jsonToTransfer["nodeLinkDownedCounter"] = node->GetLinkDownedCounter();
-            jsonToTransfer["nodeExcessiveBufferOverrunErrors"] = node->GetExcessiveBufferOverrunErrors();
             jsonToTransfer["nodeMulticastRcvPkts"] = node->GetMulticastRcvPkts();
             jsonToTransfer["nodeMulticastXmitPkts"] = node->GetMulticastXmitPkts();
             jsonToTransfer["nodeXmitWait"] = node->GetXmitWait();
@@ -62,6 +60,7 @@ json InfinibandReader::collectNodeInfos() {
         cout << debugOutput << std::endl;
 
     } catch (const std::exception &e) {
+        // return an error json
         jsonToTransfer["node"] = "failed";
         jsonToTransfer["port"] = 99;
         jsonToTransfer["transmitted"] = 1;
