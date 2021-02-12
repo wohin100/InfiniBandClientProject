@@ -13,27 +13,27 @@ int clientSocket;
 char* address;
 int port;
 
+//#define DEBUG "dummy"
+
+
 Client::Client(string serverAddress, int serverPort) {
-    parseServerAddress(serverAddress);
-
-    port = serverPort;
-}
-
-void Client::parseServerAddress(const string &serverAddress) const {
+    //parseServerAddress(serverAddress);
     int length = serverAddress.length();
 
-    char char_array[length + 1];
-    strcpy(address, serverAddress.c_str());
+    char charArray[length + 1];
+    strcpy(charArray, serverAddress.c_str());
 
-    for (int charNr = 0; charNr < length; charNr++){
-        cout << char_array[charNr];
-    }
+    address = charArray;
+
+    port = serverPort;
 }
 
 void Client::sendDataToServer(string dataToSend)
 {
     // socket creation
+    #ifdef DEBUG
     std::cout << "Send infiniband data to server" << std::endl;
+    #endif
 
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
@@ -49,8 +49,11 @@ void Client::sendDataToServer(string dataToSend)
     inet_pton(AF_INET, address, &serverSocketAddressInformation.sin_addr);
 
     //	Connect to server
-    int connectionSuccess = connect(clientSocket, (sockaddr *) &serverSocketAddressInformation,
-                                    sizeof(serverSocketAddressInformation));
+    int connectionSuccess = connect(
+            clientSocket,
+            (sockaddr *) &serverSocketAddressInformation,
+            sizeof(serverSocketAddressInformation)
+            );
 
     // error
     if (connectionSuccess == -1) {
@@ -64,9 +67,12 @@ void Client::sendDataToServer(string dataToSend)
 
     int sendResult = send(clientSocket, dataToSend.c_str(), dataToSend.size() + 1, 0);
 
+    #ifdef DEBUG
     if (dataToSend.size() + 1 - sendResult == 0) {
+
         std::cout << "Data transmission completed" << std::endl;
     }
+    #endif
 
     close(clientSocket);
 }

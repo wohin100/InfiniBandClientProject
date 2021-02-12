@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <iostream>
 #include <unistd.h>
+#include <thread>
 #include "Client.h"
 #include "InfinibandReader.h"
 #include "ConfigFileReader.h"
@@ -17,7 +18,7 @@ FakeInfinibandReader *fakeInfinibandReader;
 
 bool isRunning = true;
 
-//#define debug = true;
+//#define DEBUG "dummy"
 
 static void SignalHandler(int signal) {
     if (signal == SIGINT) {
@@ -35,10 +36,29 @@ int main(int argc, char *argv[]) {
         configFileReader->read(argv[1]);
     }
 
-    while (isRunning){
-        json infos = fakeInfinibandReader->collectNodeInfos(configFileReader->getClientNr());
-        string dataToSend = infos.dump();
-        cout << dataToSend << endl;
+    #ifdef DEBUG
+    std::cout << configFileReader->getInterval() << std::endl;
+    #endif
+
+
+    if(configFileReader->isTestMode()){
+        this_thread::sleep_for(chrono::milliseconds(configFileReader->getClientNr() * 1000));
+        fakeInfinibandReader = new FakeInfinibandReader(configFileReader->getClientNr(), configFileReader->getInterval());
+        while (isRunning){
+            json infos = fakeInfinibandReader->collectNodeInfos();
+            string dataToSend = infos.dump();
+            #ifdef DEBUG
+            cout << dataToSend << endl;
+            #endif
+
+            // send it to server
+            auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());
+
+            client->sendDataToServer(dataToSend);
+
+            // wait some time till next data collection
+            this_thread::sleep_for(chrono::milliseconds(configFileReader->getInterval()));
+        }
     }
 
     /*

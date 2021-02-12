@@ -81,7 +81,7 @@ void applyInputValueToProperty(const string &key, const string &value) {
         testMode = stoi(value);
     }
     if (key == "interval"){
-        testMode = stoi(value);
+        interval = stoi(value);
     }
 }
 
