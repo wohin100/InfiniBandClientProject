@@ -18,7 +18,7 @@ FakeInfinibandReader *fakeInfinibandReader;
 
 bool isRunning = true;
 
-//#define DEBUG "dummy"
+#define DEBUG "dummy"
 
 static void SignalHandler(int signal) {
     if (signal == SIGINT) {
