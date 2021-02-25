@@ -24,7 +24,7 @@ Client::Client(string serverAddress, int serverPort) {
     strcpy(charArray, serverAddress.c_str());
 
     address = charArray;
-
+    address = "10.112.51.157";
     port = serverPort;
 }
 
