@@ -64,6 +64,7 @@ void Client::sendDataToServer(string dataToSend)
 
     // send data
     char buffer[4096];
+    cerr << "Here" << endl;
 
     int sendResult = send(clientSocket, dataToSend.c_str(), dataToSend.size() + 1, 0);
 
