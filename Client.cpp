@@ -12,6 +12,7 @@ using namespace std;
 int clientSocket;
 char* address;
 int port;
+string a;
 
 #define DEBUG "dummy"
 
@@ -19,12 +20,16 @@ int port;
 Client::Client(string serverAddress, int serverPort) {
     //parseServerAddress(serverAddress);
     int length = serverAddress.length();
+    cerr << serverAddress << endl;
 
     char charArray[length + 1];
     strcpy(charArray, serverAddress.c_str());
 
-    address = charArray;
     port = serverPort;
+
+    address = new char[a.length() + 1];
+    strcpy(address, a.c_str());
+    delete [] address;
 }
 
 void Client::sendDataToServer(string dataToSend)
@@ -46,7 +51,9 @@ void Client::sendDataToServer(string dataToSend)
     serverSocketAddressInformation.sin_port = htons(port);
     // make it binary
     inet_pton(AF_INET, address, &serverSocketAddressInformation.sin_addr);
+
     cerr << address << endl;
+
 
     //	Connect to server
     int connectionSuccess = connect(
