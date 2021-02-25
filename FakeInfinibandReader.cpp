@@ -86,6 +86,8 @@ json FakeInfinibandReader::collectNodeInfos() {
 
     jsonToTransfer["nodeVL15Dropped"] = 0;
 
+    jsonToTransfer["nodeName"] = text;
+
     return jsonToTransfer;
 }
 

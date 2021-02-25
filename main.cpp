@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     else{
         string dataToSend =  "";
         while (isRunning){
-            json infos = InfinibandReader::collectNodeInfos();
+            json infos = InfinibandReader::collectNodeInfos(configFileReader->getClientNr());
             dataToSend = infos.dump();
 
             // send it to server

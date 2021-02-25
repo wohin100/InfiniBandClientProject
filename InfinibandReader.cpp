@@ -11,7 +11,7 @@ using Detector::IbFabric;
 
 using namespace std;
 
-json InfinibandReader::collectNodeInfos() {
+json InfinibandReader::collectNodeInfos(int clientNr) {
     json jsonToTransfer;
     try {
         std::cout << "Collect infiniband data" << std::endl;
@@ -52,6 +52,10 @@ json InfinibandReader::collectNodeInfos() {
             jsonToTransfer["nodeLinkRecoveryCounter"] = node->GetLinkRecoveryCounter();
 
             jsonToTransfer["nodeVL15Dropped"] = node->GetVL15Dropped();
+
+            string text = "TestNode";
+            text += std::to_string(clientNr);
+            jsonToTransfer["nodeName"] = text;
 
             vector<Detector::IbPort *> portVector = node->GetPorts();
             int portNr = 0;
