@@ -47,7 +47,7 @@ void Client::sendDataToServer(string dataToSend)
     serverSocketAddressInformation.sin_port = htons(port);
     // make it binary
     inet_pton(AF_INET, address, &serverSocketAddressInformation.sin_addr);
-    cerr << "Here" << endl;
+    cerr << address << endl;
 
     //	Connect to server
     int connectionSuccess = connect(
