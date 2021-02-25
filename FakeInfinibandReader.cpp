@@ -52,7 +52,6 @@ int meanValue = 0;
 json FakeInfinibandReader::collectNodeInfos() {
     json jsonToTransfer;
 
-
     string text = "TestNode";
     text += std::to_string(nodeNumber);
     jsonToTransfer["nodeDescription"] = text;
@@ -61,37 +60,36 @@ json FakeInfinibandReader::collectNodeInfos() {
     text += std::to_string(nodeNumber);
     jsonToTransfer["nodeGuid"] = text;
 
-    jsonToTransfer["nodeUnicastRcvPkts"] = fakeValue(&nodeUnicastRcvPkts);
-    jsonToTransfer["nodeUnicastXmitPkts"] = fakeValue(&nodeUnicastXmitPkts);
+    jsonToTransfer["nodeUnicastRcvPkts"] = fakeValue(&nodeUnicastRcvPkts, 0);
+    jsonToTransfer["nodeUnicastXmitPkts"] = fakeValue(&nodeUnicastXmitPkts, 0);
 
-    jsonToTransfer["nodeMulticastRcvPkts"] = fakeValue(&nodeMulticastRcvPkts);
-    jsonToTransfer["nodeMulticastXmitPkts"] = fakeValue(&nodeMulticastXmitPkts);
+    jsonToTransfer["nodeMulticastRcvPkts"] = fakeValue(&nodeMulticastRcvPkts, 0);
+    jsonToTransfer["nodeMulticastXmitPkts"] = fakeValue(&nodeMulticastXmitPkts, 0);
 
-    jsonToTransfer["nodeRcvPkts"] = fakeValue(&nodeRcvPkts);
-    jsonToTransfer["nodeRcvErrors"] = fakeValue(&nodeRcvErrors);
-    jsonToTransfer["nodeRcvConstraintErrors"] = fakeValue(&nodeRcvConstraintErrors);
-    jsonToTransfer["nodeRcvDataBytes"] = fakeValue(&nodeRcvDataBytes);
-    jsonToTransfer["nodeRcvRemotePhysicalErrors"] = fakeValue(&nodeRcvRemotePhysicalErrors);
-    jsonToTransfer["nodeRcvSwitchRelayErrors"] = fakeValue(&nodeRcvSwitchRelayErrors);
+    jsonToTransfer["nodeRcvPkts"] = fakeValue(&nodeRcvPkts, 0);
+    jsonToTransfer["nodeRcvErrors"] = fakeValue(&nodeRcvErrors, 1);
+    jsonToTransfer["nodeRcvConstraintErrors"] = fakeValue(&nodeRcvConstraintErrors, 2);
+    jsonToTransfer["nodeRcvDataBytes"] = fakeValue(&nodeRcvDataBytes, 0);
+    jsonToTransfer["nodeRcvRemotePhysicalErrors"] = fakeValue(&nodeRcvRemotePhysicalErrors, 3);
+    jsonToTransfer["nodeRcvSwitchRelayErrors"] = fakeValue(&nodeRcvSwitchRelayErrors, 4);
 
-    jsonToTransfer["nodeXmitWait"] = fakeValue(&nodeXmitWait);
-    jsonToTransfer["nodeXmitPkts"] = fakeValue(&nodeXmitPkts);
-    jsonToTransfer["nodeXmitDiscards"] = fakeValue(&nodeXmitDiscards);
-    jsonToTransfer["nodeXmitDataBytes"] = fakeValue(&nodeXmitDataBytes);
-    jsonToTransfer["nodeXmitConstraintErrors"] = fakeValue(&nodeXmitConstraintErrors);
+    jsonToTransfer["nodeXmitWait"] = fakeValue(&nodeXmitWait, 0);
+    jsonToTransfer["nodeXmitPkts"] = fakeValue(&nodeXmitPkts, 0);
+    jsonToTransfer["nodeXmitDiscards"] = fakeValue(&nodeXmitDiscards, 5);
+    jsonToTransfer["nodeXmitDataBytes"] = fakeValue(&nodeXmitDataBytes, 0);
+    jsonToTransfer["nodeXmitConstraintErrors"] = fakeValue(&nodeXmitConstraintErrors, 6);
 
-    jsonToTransfer["nodeExcessiveBufferOverrunErrors"] = fakeValue(&nodeExcessiveBufferOverrunErrors);
-    jsonToTransfer["nodeLinkDownedCounter"] = fakeValue(&nodeLinkDownedCounter);
-    jsonToTransfer["nodeLocalLinkIntegrityErrors"] = fakeValue(&nodeLocalLinkIntegrityErrors);
-    jsonToTransfer["nodeLinkRecoveryCounter"] = fakeValue(&nodeLinkRecoveryCounter);
+    jsonToTransfer["nodeExcessiveBufferOverrunErrors"] = fakeValue(&nodeExcessiveBufferOverrunErrors, 7);
+    jsonToTransfer["nodeLinkDownedCounter"] = fakeValue(&nodeLinkDownedCounter, 0);
+    jsonToTransfer["nodeLocalLinkIntegrityErrors"] = fakeValue(&nodeLocalLinkIntegrityErrors, 8);
+    jsonToTransfer["nodeLinkRecoveryCounter"] = fakeValue(&nodeLinkRecoveryCounter, 0);
 
     jsonToTransfer["nodeVL15Dropped"] = 0;
 
     return jsonToTransfer;
 }
 
-
-int FakeInfinibandReader::fakeValue(int* valueToIncrease) {
+int FakeInfinibandReader::fakeValue(int* valueToIncrease, int isError) {
     int value = generateRandomNumber(0,2);
     int currentFactor = generateRandomNumber(1,20);
 
@@ -126,18 +124,22 @@ int FakeInfinibandReader::fakeValue(int* valueToIncrease) {
         }
     }
 
-    if ((periodEnd-periodRunningCounter) % 100 == 0) {
-        //std::cout << (periodEnd - periodRunningCounter) << std::endl;
-        //std::cout << increaseValue << std::endl;
+    // error counter should increase very slow
+    if(isError > 0){
+        int setError = generateRandomNumber(1, 1000) % 1;
+        if (setError == 0){
+            return isError;
+        } else{
+            return 0;
+        }
     }
+
     if(periodIsSilenced == 0){
         return *valueToIncrease;
-        //return test;
     }
     else{
         *valueToIncrease = *valueToIncrease + increaseValue;
         return *valueToIncrease;
-        //return test;
     }
 }
 

@@ -17,4 +17,6 @@ public:
 
     nlohmann::json collectNodeInfos();
     int generateRandomNumber(int min, int max) const;
+
+    int fakeValue(int *valueToIncrease, int isError);
 };
