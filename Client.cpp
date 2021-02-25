@@ -13,7 +13,7 @@ int clientSocket;
 char* address;
 int port;
 string a;
-
+char* testAddress = "10.112.51.157";
 #define DEBUG "dummy"
 
 
@@ -50,9 +50,9 @@ void Client::sendDataToServer(string dataToSend)
     serverSocketAddressInformation.sin_family = AF_INET;
     serverSocketAddressInformation.sin_port = htons(port);
     // make it binary
-    inet_pton(AF_INET, address, &serverSocketAddressInformation.sin_addr);
+    inet_pton(AF_INET, testAddress, &serverSocketAddressInformation.sin_addr);
 
-    cerr << address << endl;
+    cerr << testAddress << endl;
 
 
     //	Connect to server
