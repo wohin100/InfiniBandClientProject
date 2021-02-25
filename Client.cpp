@@ -13,7 +13,7 @@ int clientSocket;
 char* address;
 int port;
 
-//#define DEBUG "dummy"
+#define DEBUG "dummy"
 
 
 Client::Client(string serverAddress, int serverPort) {
