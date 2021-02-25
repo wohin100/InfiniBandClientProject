@@ -11,6 +11,7 @@ using namespace std;
 
 int clientSocket;
 char* address;
+char* testAddress = "10.112.51.157";
 int port;
 
 #define DEBUG "dummy"
@@ -24,7 +25,6 @@ Client::Client(string serverAddress, int serverPort) {
     strcpy(charArray, serverAddress.c_str());
 
     address = charArray;
-    address = "10.112.51.157";
     port = serverPort;
 }
 
@@ -47,7 +47,7 @@ void Client::sendDataToServer(string dataToSend)
     serverSocketAddressInformation.sin_port = htons(port);
     // make it binary
     inet_pton(AF_INET, address, &serverSocketAddressInformation.sin_addr);
-    cerr << address << endl;
+    cerr << testAddress << endl;
 
     //	Connect to server
     int connectionSuccess = connect(
