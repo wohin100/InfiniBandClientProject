@@ -60,6 +60,21 @@ int main(int argc, char *argv[]) {
             this_thread::sleep_for(chrono::milliseconds(configFileReader->getInterval()));
         }
     }
+    else{
+        string dataToSend =  "";
+        while (isRunning){
+            json infos = InfinibandReader::collectNodeInfos();
+            dataToSend = infos.dump();
+
+            // send it to server
+            auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());
+
+            client->sendDataToServer(dataToSend);
+
+            // wait some time till next data collection
+            usleep(configFileReader->getInterval());
+        }
+    }
 
     /*
     int ground = 10;
