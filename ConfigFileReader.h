@@ -16,4 +16,6 @@ public:
     bool isTestMode();
 
     int getInterval();
+
+    void setClientNr(int nr);
 };

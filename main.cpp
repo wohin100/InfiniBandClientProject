@@ -28,12 +28,13 @@ static void SignalHandler(int signal) {
 
 int main(int argc, char *argv[]) {
     // check params
-    if (argc < 2) {
-        printf("Usage: ./InfiniBandClient <configFilePath>\n");
+    if (argc < 3) {
+        printf("Usage: ./InfiniBandClient <configFilePath> <Node Number>\n");
         exit(EXIT_FAILURE);
     } else {
         configFileReader = new ConfigFileReader();
         configFileReader->read(argv[1]);
+        configFileReader->setClientNr(stoi(argv[2]));
     }
 
     #ifdef DEBUG

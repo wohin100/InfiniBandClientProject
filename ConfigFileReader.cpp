@@ -34,6 +34,10 @@ int ConfigFileReader::getInterval(){
     return interval;
 }
 
+void ConfigFileReader::setClientNr(int nr){
+    clientNr = nr;
+}
+
 bool ConfigFileReader::isTestMode(){
     if (testMode == 0){
         return false;
