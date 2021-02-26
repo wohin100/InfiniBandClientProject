@@ -66,6 +66,9 @@ int main(int argc, char *argv[]) {
         while (isRunning){
             json infos = InfinibandReader::collectNodeInfos(configFileReader->getClientNr());
             dataToSend = infos.dump();
+#ifdef DEBUG
+            cout << dataToSend << endl;
+#endif
 
             // send it to server
             auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());
