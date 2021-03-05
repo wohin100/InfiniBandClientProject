@@ -14,7 +14,8 @@ int serverPort = 80;
 string serverAddress;
 int clientNr = 1;
 int testMode = 0;
-int interval = 100000;
+long long interval = 100000;
+string configuration;
 
 ConfigFileReader::ConfigFileReader() = default;
 
@@ -34,6 +35,10 @@ int ConfigFileReader::getInterval(){
     return interval;
 }
 
+string ConfigFileReader::getConfiguration(){
+    return configuration;
+}
+
 void ConfigFileReader::setClientNr(int nr){
     clientNr = nr;
 }
@@ -43,6 +48,14 @@ bool ConfigFileReader::isTestMode(){
         return false;
     } else{
         return true;
+    }
+}
+
+bool ConfigFileReader::isSingleTestMode(){
+    if (testMode > 1){
+        return true;
+    } else{
+        return false;
     }
 }
 
@@ -85,7 +98,13 @@ void applyInputValueToProperty(const string &key, const string &value) {
         testMode = stoi(value);
     }
     if (key == "interval"){
-        interval = stoi(value);
+        cerr << "Vor" << endl;
+        interval = stoll(value);
+        cerr << "Nach" << endl;
+
+    }
+    if (key == "testCondition"){
+        configuration = value;
     }
 }
 

@@ -9,6 +9,7 @@
 #include "InfinibandReader.h"
 #include "ConfigFileReader.h"
 #include "FakeInfinibandReader.h"
+#include "InfinibandTrafficFaker.h"
 
 using nlohmann::json;
 
@@ -18,7 +19,11 @@ FakeInfinibandReader *fakeInfinibandReader;
 
 bool isRunning = true;
 
-#define DEBUG "dummy"
+//#define DEBUG "dummy"
+
+void singeTestModeOperation();
+
+void testModeOperation();
 
 static void SignalHandler(int signal) {
     if (signal == SIGINT) {
@@ -37,33 +42,33 @@ int main(int argc, char *argv[]) {
         configFileReader->setClientNr(stoi(argv[2]));
     }
 
-    #ifdef DEBUG
+#ifdef DEBUG
     std::cout << configFileReader->getInterval() << std::endl;
-    #endif
+#endif
 
 
-    if(configFileReader->isTestMode()){
-        this_thread::sleep_for(chrono::milliseconds(configFileReader->getClientNr() * 1000));
-        fakeInfinibandReader = new FakeInfinibandReader(configFileReader->getClientNr(), configFileReader->getInterval());
-        while (isRunning){
-            json infos = fakeInfinibandReader->collectNodeInfos();
-            string dataToSend = infos.dump();
-            #ifdef DEBUG
-            cout << dataToSend << endl;
-            #endif
-
-            // send it to server
-            auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());
-
-            client->sendDataToServer(dataToSend);
-
-            // wait some time till next data collection
-            this_thread::sleep_for(chrono::milliseconds(configFileReader->getInterval()));
+    if (configFileReader->isTestMode()) {
+        if (configFileReader->isSingleTestMode()) {
+            while (isRunning) {
+                singeTestModeOperation();
+                // wait some time till next data collection
+                usleep(configFileReader->getInterval());
+            }
         }
-    }
-    else{
-        string dataToSend =  "";
-        while (isRunning){
+        else {
+            this_thread::sleep_for(chrono::milliseconds(configFileReader->getClientNr() * 1000));
+            fakeInfinibandReader = new FakeInfinibandReader(configFileReader->getClientNr(),
+                                                            configFileReader->getInterval());
+            while (isRunning) {
+                testModeOperation();
+
+                // wait some time till next data collection
+                usleep(configFileReader->getInterval());
+            }
+        }
+    } else {
+        string dataToSend = "";
+        while (isRunning) {
             json infos = InfinibandReader::collectNodeInfos(configFileReader->getClientNr());
             dataToSend = infos.dump();
 #ifdef DEBUG
@@ -111,4 +116,34 @@ int main(int argc, char *argv[]) {
     }
     */
     return 0;
+}
+
+void testModeOperation() {
+    json infos = fakeInfinibandReader->collectNodeInfos();
+    string dataToSend = infos.dump();
+#ifdef DEBUG
+    cout << dataToSend << endl;
+#endif
+
+    // send it to server
+    auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());
+
+    client->sendDataToServer(dataToSend);
+}
+
+void singeTestModeOperation() {
+    InfinibandTrafficFaker *infinibandTrafficFaker = new InfinibandTrafficFaker();
+    nlohmann::basic_json<> *datasToSend = infinibandTrafficFaker->getTraffic(
+            configFileReader->getConfiguration(), configFileReader->getInterval());
+    for (int dataSetNr = 0; dataSetNr < datasToSend->size(); ++dataSetNr) {
+        if (datasToSend[dataSetNr] != nullptr) {
+            string dataToSend = datasToSend[dataSetNr].dump();
+            // send it to server
+            auto *client = new Client(configFileReader->getServerAddress(),
+                                      configFileReader->getServerPort());
+            client->sendDataToServer(dataToSend);
+            // delay between each request 0,1 s
+            usleep(100000);
+        }
+    }
 }

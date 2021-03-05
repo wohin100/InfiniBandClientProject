@@ -51,7 +51,7 @@ int meanValue = 0;
 
 json FakeInfinibandReader::collectNodeInfos() {
     json jsonToTransfer;
-
+    try {
     string text = "TestNode";
     text += std::to_string(nodeNumber);
     jsonToTransfer["nodeDescription"] = text;
@@ -73,20 +73,26 @@ json FakeInfinibandReader::collectNodeInfos() {
     jsonToTransfer["nodeRcvRemotePhysicalErrors"] = fakeValue(&nodeRcvRemotePhysicalErrors, 3);
     jsonToTransfer["nodeRcvSwitchRelayErrors"] = fakeValue(&nodeRcvSwitchRelayErrors, 4);
 
-    jsonToTransfer["nodeXmitWait"] = fakeValue(&nodeXmitWait, 0);
+    jsonToTransfer["nodeXmitWait"] = fakeValue(&nodeXmitWait, 8);
     jsonToTransfer["nodeXmitPkts"] = fakeValue(&nodeXmitPkts, 0);
     jsonToTransfer["nodeXmitDiscards"] = fakeValue(&nodeXmitDiscards, 5);
     jsonToTransfer["nodeXmitDataBytes"] = fakeValue(&nodeXmitDataBytes, 0);
     jsonToTransfer["nodeXmitConstraintErrors"] = fakeValue(&nodeXmitConstraintErrors, 6);
 
     jsonToTransfer["nodeExcessiveBufferOverrunErrors"] = fakeValue(&nodeExcessiveBufferOverrunErrors, 7);
-    jsonToTransfer["nodeLinkDownedCounter"] = fakeValue(&nodeLinkDownedCounter, 0);
+    jsonToTransfer["nodeLinkDownedCounter"] = fakeValue(&nodeLinkDownedCounter, 10);
     jsonToTransfer["nodeLocalLinkIntegrityErrors"] = fakeValue(&nodeLocalLinkIntegrityErrors, 8);
-    jsonToTransfer["nodeLinkRecoveryCounter"] = fakeValue(&nodeLinkRecoveryCounter, 0);
+    jsonToTransfer["nodeLinkRecoveryCounter"] = fakeValue(&nodeLinkRecoveryCounter, 11);
 
-    jsonToTransfer["nodeVL15Dropped"] = 0;
+    jsonToTransfer["nodeVL15Dropped"] = 12;
 
+    text = "TestNode";
+        text += std::to_string(nodeNumber);
     jsonToTransfer["nodeName"] = text;
+
+    } catch (const nlohmann::detail::parse_error& e) {
+        cerr << e.what() << endl;
+    }
 
     return jsonToTransfer;
 }
@@ -156,5 +162,6 @@ FakeInfinibandReader::FakeInfinibandReader(int nodeNr, int interval) {
     intervalTime = interval;
     nodeNumber = nodeNr;
     int numberOfFakeFunctionCalls = 19;
-    checkPoint = (10000 / intervalTime) * numberOfFakeFunctionCalls;
+    //checkPoint = (10000 / intervalTime) * numberOfFakeFunctionCalls;
+    checkPoint = 21;
 }

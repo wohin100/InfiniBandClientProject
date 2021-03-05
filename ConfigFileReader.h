@@ -18,4 +18,8 @@ public:
     int getInterval();
 
     void setClientNr(int nr);
+
+    bool isSingleTestMode();
+
+    string getConfiguration();
 };
