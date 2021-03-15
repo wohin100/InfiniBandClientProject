@@ -42,11 +42,6 @@ int main(int argc, char *argv[]) {
         configFileReader->setClientNr(stoi(argv[2]));
     }
 
-#ifdef DEBUG
-    std::cout << configFileReader->getInterval() << std::endl;
-#endif
-
-
     if (configFileReader->isTestMode()) {
         if (configFileReader->isSingleTestMode()) {
             while (isRunning) {
@@ -71,9 +66,6 @@ int main(int argc, char *argv[]) {
         while (isRunning) {
             json infos = InfinibandReader::collectNodeInfos(configFileReader->getClientNr());
             dataToSend = infos.dump();
-#ifdef DEBUG
-            cout << dataToSend << endl;
-#endif
 
             // send it to server
             auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());
@@ -84,46 +76,12 @@ int main(int argc, char *argv[]) {
             usleep(configFileReader->getInterval());
         }
     }
-
-    /*
-    int ground = 10;
-    string dataToSend =  "{\"MulticastRcvPkts\":8,\"node\":\"mlx4_0\",\"port\":1,\"received\":"+std::to_string(ground)+",\"transmitted\":33984}";
-
-    while (isRunning) {
-        int randomNumber = rand() % 10;
-        dataToSend =  "";
-        if (configFileReader->isTestMode()){
-            dataToSend =  "{\"MulticastRcvPkts\":8,\"node\":\""+
-                    std::to_string(configFileReader->getClientNr())+
-                    "\",\"port\":1,\"received\":"+
-                    std::to_string(randomNumber)+
-                    ",\"transmitted\":33984}";
-        }
-        else{
-            // collect infiniband infos
-            json infos = InfinibandReader::collectNodeInfos();
-            dataToSend = infos.dump();
-            cout << dataToSend << endl;
-        }
-
-        // send it to server
-        auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());
-
-        client->sendDataToServer(dataToSend);
-
-        // wait some time till next data collection
-        usleep(configFileReader->getInterval());
-    }
-    */
     return 0;
 }
 
 void testModeOperation() {
     json infos = fakeInfinibandReader->collectNodeInfos();
     string dataToSend = infos.dump();
-#ifdef DEBUG
-    cout << dataToSend << endl;
-#endif
 
     // send it to server
     auto *client = new Client(configFileReader->getServerAddress(), configFileReader->getServerPort());

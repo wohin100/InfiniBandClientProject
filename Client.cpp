@@ -34,9 +34,6 @@ Client::Client(string serverAddress, int serverPort) {
 void Client::sendDataToServer(string dataToSend)
 {
     // socket creation
-    #ifdef DEBUG
-    std::cout << "Send infiniband data to server" << std::endl;
-    #endif
 
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
@@ -49,7 +46,6 @@ void Client::sendDataToServer(string dataToSend)
     serverSocketAddressInformation.sin_family = AF_INET;
     serverSocketAddressInformation.sin_port = htons(port);
     // make it binary
-    char* testAddress = "10.112.51.157";
     inet_pton(AF_INET, address, &serverSocketAddressInformation.sin_addr);
 
     //	Connect to server
@@ -70,13 +66,6 @@ void Client::sendDataToServer(string dataToSend)
     char buffer[4096];
 
     int sendResult = send(clientSocket, dataToSend.c_str(), dataToSend.size() + 1, 0);
-
-    #ifdef DEBUG
-    if (dataToSend.size() + 1 - sendResult == 0) {
-
-        std::cout << "Data transmission completed" << std::endl;
-    }
-    #endif
 
     close(clientSocket);
 }

@@ -98,9 +98,7 @@ void applyInputValueToProperty(const string &key, const string &value) {
         testMode = stoi(value);
     }
     if (key == "interval"){
-        cerr << "Vor" << endl;
         interval = stoll(value);
-        cerr << "Nach" << endl;
 
     }
     if (key == "testCondition"){

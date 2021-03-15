@@ -94,21 +94,5 @@ nlohmann::basic_json<> * InfinibandTrafficFaker::getTraffic(string configuration
         results[nodeNumberFrom - 1] = from;
         results[nodeNumberTo - 1] = to;
     }
-
-
-/*
-    int nodeNumberFrom = relations["from"].get<int>();
-    int nodeNumberTo = relations["to"].get<int>();
-
-
-    FakeInfinibandReader *fakeInfinibandReaderFrom = new FakeInfinibandReader(nodeNumberFrom, intervallTime);
-    FakeInfinibandReader *fakeInfinibandReaderTo = new FakeInfinibandReader(nodeNumberTo, intervallTime);
-    json infos = fakeInfinibandReaderFrom->collectNodeInfos();
-    json infos2 = fakeInfinibandReaderTo->collectNodeInfos();
-
-    json infos3 = fakers[0]->collectNodeInfos();
-    json infos4 = fakers[1]->collectNodeInfos();
-    results[0] = infos3;
-    results[1] = infos4;*/
     return results;
 }

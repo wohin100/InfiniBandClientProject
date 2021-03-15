@@ -58,14 +58,6 @@ json InfinibandReader::collectNodeInfos(int clientNr) {
             jsonToTransfer["nodeName"] = text;
 
             vector<Detector::IbPort *> portVector = node->GetPorts();
-       /*     int portNr = 0;
-            for (Detector::IbPort *port : portVector) {
-                jsonToTransfer[&"port"[portNr]] = port->GetNum();
-                jsonToTransfer[&"transmitted"[portNr]] = port->GetXmitDataBytes();
-                jsonToTransfer[&"received"[portNr]] = port->GetRcvDataBytes();
-                jsonToTransfer[&"MulticastRcvPkts"[portNr]] = port->GetMulticastRcvPkts();
-                portNr++;
-            }*/
         }
         string debugOutput = jsonToTransfer.dump();
         cout << debugOutput << std::endl;
